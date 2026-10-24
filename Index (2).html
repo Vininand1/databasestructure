@@ -1,0 +1,480 @@
+```html
+<!-- Chosen Palette: Slate Navy & Vibrant Cyan -->
+<!-- Application Structure Plan: Responsive single-page agency portfolio for Gaytri Solutions. Designed to maximize conversion through clear value propositions, interactive service cards, transparent low-cost pricing tiers, client testimonials, founder story, interactive FAQ, and a seamless Web3Forms contact form that sends emails directly. Uses HTML Canvas for dynamic background particle effects instead of SVG/Mermaid. -->
+<!-- Visualization & Content Choices: Dynamic HTML Canvas particles for smooth visual appeal, FontAwesome Unicode icons for service representations, interactive JavaScript accordion for FAQs, and Tailwind CSS responsive grid structures for pricing & portfolio. Strictly NO SVG graphics and NO Mermaid JS used. -->
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gaytri Solutions | Digital Agency & Growth Partner</title>
+<link rel="icon" id="favicon" href="">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Plus Jakarta Sans','Inter','sans-serif']}}}}</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f8fc; --bg2:#e9f1fa; --card:rgba(255,255,255,.88); --card-solid:#ffffff;
+  --border:rgba(15,40,80,.10); --text:#0b1730; --muted:#4b5b75; --soft:#64748b;
+  --accent:#0284c7; --accent2:#2563eb; --accent-bg:rgba(2,132,199,.10); --accent-bd:rgba(2,132,199,.28);
+  --input:#f1f5fb; --shadow:0 10px 30px -10px rgba(15,40,80,.18); --particle:rgba(2,132,199,.22);
+  --btn-text:#fff; --glow:rgba(2,132,199,.22);
+}
+html.dark{
+  --bg:#05070f; --bg2:#0a1022; --card:rgba(13,19,34,.85); --card-solid:#0d1322;
+  --border:rgba(255,255,255,.09); --text:#f1f5f9; --muted:#cbd5e1; --soft:#94a3b8;
+  --accent:#22d3ee; --accent2:#3b82f6; --accent-bg:rgba(34,211,238,.10); --accent-bd:rgba(34,211,238,.28);
+  --input:#070b16; --shadow:0 10px 40px -10px rgba(0,0,0,.6); --particle:rgba(6,182,212,.28);
+  --btn-text:#fff; --glow:rgba(6,182,212,.28);
+}
+*{transition:background-color .3s ease,border-color .3s ease,color .3s ease,box-shadow .3s ease}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);
+  background-image:radial-gradient(900px 500px at 85% -5%,var(--accent-bg),transparent 60%),radial-gradient(700px 500px at -5% 40%,var(--accent-bg),transparent 60%);
+  background-attachment:fixed}
+.t-main{color:var(--text)} .t-muted{color:var(--muted)} .t-soft{color:var(--soft)} .t-accent{color:var(--accent)}
+.glass{background:var(--card);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--border);box-shadow:var(--shadow)}
+.inset{background:var(--input);border:1px solid var(--border)}
+.chip{color:var(--accent);background:var(--accent-bg);border:1px solid var(--accent-bd)}
+.btn-grad{background:linear-gradient(90deg,#06b6d4,#2563eb);color:#fff}
+html:not(.dark) .btn-grad{background:linear-gradient(90deg,#0ea5e9,#2563eb)}
+.btn-ghost{background:var(--card);border:1px solid var(--border);color:var(--text)}
+.btn-ghost:hover,.btn-soft:hover{border-color:var(--accent);color:var(--accent)}
+.btn-soft{background:var(--input);border:1px solid var(--border);color:var(--text)}
+.btn-soft:hover{background:var(--accent);color:#fff!important}
+.card-hover:hover{transform:translateY(-4px);border-color:var(--accent);box-shadow:0 18px 40px -12px var(--glow)}
+.card-hover{transition:transform .25s ease,border-color .3s,box-shadow .3s}
+.grad-text{background:linear-gradient(90deg,var(--accent),var(--accent2),#6366f1);-webkit-background-clip:text;background-clip:text;color:transparent}
+.nav-btn{color:var(--muted);position:relative;padding:6px 2px}
+.nav-btn:hover{color:var(--accent)}
+.nav-btn.active{color:var(--accent);font-weight:800}
+.nav-btn.active::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.m-btn{display:block;width:100%;text-align:left;padding:10px 12px;border-radius:12px;color:var(--muted);font-weight:600}
+.m-btn.active{color:var(--accent);background:var(--accent-bg);font-weight:800}
+.field{width:100%;background:var(--input);border:1px solid var(--border);border-radius:12px;padding:.9rem 1rem;font-size:.875rem;color:var(--text);outline:none}
+.field::placeholder{color:var(--soft)}
+.field:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
+.logo-ring{box-shadow:0 0 0 2px var(--accent-bd),0 8px 24px -6px var(--glow)}
+.page-content{animation:fade .45s ease}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+#bg-canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+::-webkit-scrollbar{width:8px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--accent);border-radius:4px}
+::selection{background:var(--accent);color:#fff}
+.popular{background:linear-gradient(180deg,var(--accent-bg),transparent)}
+</style>
+</head>
+<body class="antialiased relative">
+<canvas id="bg-canvas"></canvas>
+
+<!-- Header -->
+<header class="fixed top-0 inset-x-0 z-40 glass" style="border-width:0 0 1px 0">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+    <a href="#" onclick="switchPage('home');return false" class="flex items-center gap-3 group">
+      <img data-logo alt="Gaytri Solutions Logo" class="w-14 h-14 rounded-full logo-ring group-hover:scale-105 transition-transform">
+      <span class="hidden sm:block text-lg font-black tracking-tight t-main font-['Outfit']">Gaytri <span class="t-accent">Solutions</span></span>
+    </a>
+
+    <nav class="hidden md:flex items-center gap-8 font-semibold text-sm">
+      <button onclick="switchPage('home')" id="nav-home" class="nav-btn active">Home</button>
+      <button onclick="switchPage('services')" id="nav-services" class="nav-btn">Services</button>
+      <button onclick="switchPage('pricing')" id="nav-pricing" class="nav-btn">Lowest Pricing</button>
+      <button onclick="switchPage('portfolio')" id="nav-portfolio" class="nav-btn">Portfolio</button>
+      <button onclick="switchPage('about')" id="nav-about" class="nav-btn">About Vinit</button>
+      <button onclick="switchPage('contact')" id="nav-contact" class="nav-btn">Contact</button>
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <button onclick="toggleTheme()" class="w-10 h-10 rounded-xl glass flex items-center justify-center t-accent hover:scale-105 transition-transform" title="Toggle Light/Dark Theme" aria-label="Toggle theme">
+        <i id="theme-icon" class="fa-solid fa-sun"></i>
+      </button>
+      <button onclick="switchPage('pricing')" class="hidden sm:inline-flex px-5 py-2.5 rounded-xl btn-grad font-extrabold text-sm shadow-lg hover:opacity-90 transition-all">Lowest Rates</button>
+      <button id="mobile-menu-btn" class="md:hidden t-main text-2xl w-10 h-10 flex items-center justify-center" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </div>
+  <div id="mobile-menu" class="hidden md:hidden px-4 py-4 space-y-1" style="border-top:1px solid var(--border)">
+    <button onclick="switchPage('home');closeMobileMenu()" data-p="home" class="m-btn">Home</button>
+    <button onclick="switchPage('services');closeMobileMenu()" data-p="services" class="m-btn">Services</button>
+    <button onclick="switchPage('pricing');closeMobileMenu()" data-p="pricing" class="m-btn">Lowest Pricing</button>
+    <button onclick="switchPage('portfolio');closeMobileMenu()" data-p="portfolio" class="m-btn">Portfolio</button>
+    <button onclick="switchPage('about');closeMobileMenu()" data-p="about" class="m-btn">About Vinit</button>
+    <button onclick="switchPage('contact');closeMobileMenu()" data-p="contact" class="m-btn">Contact</button>
+  </div>
+</header>
+
+<main class="pt-24 min-h-screen pb-24 relative z-10">
+
+<!-- HOME PAGE -->
+<div id="page-home" class="page-content max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-20">
+  <div class="max-w-4xl mx-auto">
+    <div class="space-y-8 text-center">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full chip text-xs sm:text-sm font-bold tracking-wide">
+        <i class="fa-solid fa-fire animate-pulse"></i><span>Market's Absolute Lowest Pricing Guaranteed</span>
+      </div>
+      <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.05] font-['Outfit'] t-main">
+        Grow Your Business With <span class="grad-text">Gaytri Solutions</span>
+      </h1>
+      <p class="t-muted text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+        Founded by <span class="t-main font-bold">Vinit</span>. We offer professional digital marketing, lightning-fast web setups, and high-converting ads at prices <span class="t-accent font-bold">cheaper than anyone else in the market</span>.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <button onclick="switchPage('pricing')" class="w-full sm:w-auto px-8 py-4 rounded-xl btn-grad font-black text-base shadow-xl hover:scale-105 transition-all">View Lowest Prices <i class="fa-solid fa-arrow-right ml-2"></i></button>
+        <button onclick="switchPage('contact')" class="w-full sm:w-auto px-8 py-4 rounded-xl btn-ghost font-bold text-base transition-all">Hire Vinit Now</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-6 pt-10" style="border-top:1px solid var(--border)">
+    <div class="glass card-hover p-6 rounded-2xl text-center space-y-2"><div class="text-3xl sm:text-4xl font-black t-accent font-['Outfit']">₹499</div><div class="text-xs t-soft uppercase tracking-widest font-semibold">Starting Price</div></div>
+    <div class="glass card-hover p-6 rounded-2xl text-center space-y-2"><div class="text-3xl sm:text-4xl font-black t-accent font-['Outfit']">500+</div><div class="text-xs t-soft uppercase tracking-widest font-semibold">Websites Launched</div></div>
+    <div class="glass card-hover p-6 rounded-2xl text-center space-y-2"><div class="text-3xl sm:text-4xl font-black t-accent font-['Outfit']">3X</div><div class="text-xs t-soft uppercase tracking-widest font-semibold">Sales Growth</div></div>
+    <div class="glass card-hover p-6 rounded-2xl text-center space-y-2"><div class="text-3xl sm:text-4xl font-black t-accent font-['Outfit']">24/7</div><div class="text-xs t-soft uppercase tracking-widest font-semibold">Direct Support</div></div>
+  </div>
+
+  <!-- Services Preview -->
+  <section class="space-y-10">
+    <div class="text-center space-y-3 max-w-3xl mx-auto">
+      <span class="text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full chip">What We Do</span>
+      <h2 class="text-3xl sm:text-4xl font-black font-['Outfit'] t-main">Complete Digital Marketing Solutions</h2>
+      <p class="t-muted">Everything your business needs to get found, get trusted and get customers, under one roof.</p>
+    </div>
+    <div id="home-services" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    <div class="text-center"><button onclick="switchPage('services')" class="px-7 py-3 rounded-xl btn-ghost font-bold text-sm transition-all">View All Services <i class="fa-solid fa-arrow-right ml-2"></i></button></div>
+  </section>
+
+  <!-- Process -->
+  <section class="space-y-10">
+    <div class="text-center space-y-3 max-w-3xl mx-auto">
+      <span class="text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full chip">How We Work</span>
+      <h2 class="text-3xl sm:text-4xl font-black font-['Outfit'] t-main">A Simple 4-Step Process</h2>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="glass p-7 rounded-3xl space-y-3 relative"><div class="text-5xl font-black font-['Outfit'] grad-text">01</div><h3 class="font-bold t-main">Discovery Call</h3><p class="t-muted text-sm">We understand your business, goals, audience and budget.</p></div>
+      <div class="glass p-7 rounded-3xl space-y-3 relative"><div class="text-5xl font-black font-['Outfit'] grad-text">02</div><h3 class="font-bold t-main">Strategy & Proposal</h3><p class="t-muted text-sm">You get a clear plan, timeline and pricing before we start.</p></div>
+      <div class="glass p-7 rounded-3xl space-y-3 relative"><div class="text-5xl font-black font-['Outfit'] grad-text">03</div><h3 class="font-bold t-main">Execution & Launch</h3><p class="t-muted text-sm">We build, set up and launch your website, ads and content.</p></div>
+      <div class="glass p-7 rounded-3xl space-y-3 relative"><div class="text-5xl font-black font-['Outfit'] grad-text">04</div><h3 class="font-bold t-main">Optimise & Grow</h3><p class="t-muted text-sm">We track performance, improve results and scale what works.</p></div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="space-y-10">
+    <div class="text-center space-y-3 max-w-3xl mx-auto">
+      <span class="text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full chip">Client Feedback</span>
+      <h2 class="text-3xl sm:text-4xl font-black font-['Outfit'] t-main">What Our Clients Say</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="glass card-hover p-7 rounded-3xl space-y-4"><div class="t-accent text-sm"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div><p class="t-muted text-sm leading-relaxed">"Vinit built our web store and ran local ads. Our walk-ins increased by 300%!"</p><div><div class="font-bold t-main text-sm">Verma Electronics Store</div><div class="text-xs t-soft">Retail & E-Commerce</div></div></div>
+      <div class="glass card-hover p-7 rounded-3xl space-y-4"><div class="t-accent text-sm"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div><p class="t-muted text-sm leading-relaxed">"We now rank #1 on Google Maps for dental services in our city. Incredible work."</p><div><div class="font-bold t-main text-sm">Smile Care Dental Clinic</div><div class="text-xs t-soft">Healthcare & Clinic</div></div></div>
+      <div class="glass card-hover p-7 rounded-3xl space-y-4"><div class="t-accent text-sm"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div><p class="t-muted text-sm leading-relaxed">"Got over 150 new memberships through Vinit's targeted social media campaigns."</p><div><div class="font-bold t-main text-sm">Apex Fitness Hub</div><div class="text-xs t-soft">Fitness & Gym</div></div></div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="space-y-10 max-w-3xl mx-auto w-full">
+    <div class="text-center space-y-3">
+      <span class="text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full chip">FAQ</span>
+      <h2 class="text-3xl sm:text-4xl font-black font-['Outfit'] t-main">Frequently Asked Questions</h2>
+    </div>
+    <div id="faq-list" class="space-y-3"></div>
+  </section>
+
+  <!-- CTA -->
+  <section class="glass rounded-3xl p-10 sm:p-14 text-center space-y-6 relative overflow-hidden" style="border-color:var(--accent-bd)">
+    <div class="relative space-y-6">
+      <h2 class="text-3xl sm:text-4xl font-black font-['Outfit'] t-main">Ready to Grow Your Business?</h2>
+      <p class="t-muted max-w-xl mx-auto">Book a free consultation and get a clear plan to bring more customers online.</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <button onclick="switchPage('contact')" class="px-8 py-4 rounded-xl btn-grad font-black shadow-xl hover:scale-105 transition-all">Get a Free Consultation</button>
+        <button onclick="switchPage('pricing')" class="px-8 py-4 rounded-xl btn-ghost font-bold transition-all">See Pricing</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- SERVICES PAGE -->
+<div id="page-services" class="page-content hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+  <div class="text-center space-y-4 max-w-3xl mx-auto">
+    <span class="text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full chip">Our Services</span>
+    <h2 class="text-3xl sm:text-5xl font-black font-['Outfit'] t-main">Elite Growth Services at Budget Rates</h2>
+    <p class="t-muted text-base">We help your business dominate online with zero heavy costs.</p>
+  </div>
+  <div id="services-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+</div>
+
+<!-- PRICING PAGE -->
+<div id="page-pricing" class="page-content hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+  <div class="text-center space-y-4 max-w-3xl mx-auto">
+    <span class="text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full chip">Market Lowest Rates</span>
+    <h2 class="text-3xl sm:text-5xl font-black font-['Outfit'] t-main">Lowest Rates. Best Quality Work.</h2>
+    <p class="t-muted text-base">We challenge the market. Unbeatable pricing designed for Indian businesses.</p>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pt-3">
+    <div class="glass card-hover p-8 rounded-3xl space-y-6 relative">
+      <h3 class="text-xl font-bold t-main font-['Outfit']">Starter Business</h3>
+      <p class="text-xs t-soft">For local shops & personal brands.</p>
+      <div class="text-3xl font-black t-accent font-['Outfit']">₹499 <span class="text-xs font-normal t-soft">/ one-time</span></div>
+      <ul class="space-y-3 text-xs t-muted">
+        <li><i class="fa-solid fa-check t-accent mr-2"></i>Professional Landing Page</li>
+        <li><i class="fa-solid fa-check t-accent mr-2"></i>Google Maps Setup</li>
+        <li><i class="fa-solid fa-check t-accent mr-2"></i>Mobile & PC Friendly</li>
+      </ul>
+      <button onclick="switchPage('contact')" class="w-full py-3 rounded-xl btn-soft font-bold text-sm transition-all">Choose Starter</button>
+    </div>
+    <div class="glass card-hover popular p-8 rounded-3xl space-y-6 relative" style="border-color:var(--accent)">
+      <span class="absolute -top-3 right-8 btn-grad font-black text-[10px] uppercase px-3 py-1 rounded-full">Most Popular</span>
+      <h3 class="text-xl font-bold t-main font-['Outfit']">Growth & Ads Master</h3>
+      <p class="text-xs t-soft">For explosive sales & customer calls.</p>
+      <div class="text-3xl font-black t-accent font-['Outfit']">₹1,499 <span class="text-xs font-normal t-soft">/ month</span></div>
+      <ul class="space-y-3 text-xs t-muted">
+        <li><i class="fa-solid fa-check t-accent mr-2"></i>Meta & Google Ad Campaigns</li>
+        <li><i class="fa-solid fa-check t-accent mr-2"></i>Full Multi-Page Website Setup</li>
+        <li><i class="fa-solid fa-check t-accent mr-2"></i>Direct Support by Vinit</li>
+      </ul>
+      <button onclick="switchPage('contact')" class="w-full py-3 rounded-xl btn-grad font-extrabold text-sm hover:scale-105 transition-all">Choose Growth</button>
+    </div>
+    <div class="glass card-hover p-8 rounded-3xl space-y-6 relative">
+      <h3 class="text-xl font-bold t-main font-['Outfit']">Agency Domination</h3>
+      <p class="text-xs t-soft">Complete handle for large scaling.</p>
+      <div class="text-3xl font-black t-accent font-['Outfit']">₹2,999 <span class="text-xs font-normal t-soft">/ month</span></div>
+      <ul class="space-y-3 text-xs t-muted">
+        <li><i class="fa-solid fa-check t-accent mr-2"></i>Unlimited Ads & Funnel Handling</li>
+        <li><i class="fa-solid fa-check t-accent mr-2"></i>Advanced Local SEO & Ranking</li>
+        <li><i class="fa-solid fa-check t-accent mr-2"></i>24/7 Dedicated Manager</li>
+      </ul>
+      <button onclick="switchPage('contact')" class="w-full py-3 rounded-xl btn-soft font-bold text-sm transition-all">Choose Agency</button>
+    </div>
+  </div>
+</div>
+
+<!-- PORTFOLIO PAGE -->
+<div id="page-portfolio" class="page-content hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+  <div class="text-center space-y-4 max-w-3xl mx-auto">
+    <span class="text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full chip">Success Stories</span>
+    <h2 class="text-3xl sm:text-5xl font-black font-['Outfit'] t-main">Client Success Stories</h2>
+    <p class="t-muted text-base">Real businesses growing exponentially with Gaytri Solutions.</p>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div class="glass card-hover p-8 rounded-3xl space-y-4">
+      <span class="text-xs font-mono px-2.5 py-1 rounded chip">Retail & E-Commerce</span>
+      <h3 class="text-xl font-bold font-['Outfit'] t-main">Verma Electronics Store</h3>
+      <p class="t-muted text-sm">"Vinit built our web store and ran local ads. Our walk-ins increased by 300%!"</p>
+    </div>
+    <div class="glass card-hover p-8 rounded-3xl space-y-4">
+      <span class="text-xs font-mono px-2.5 py-1 rounded chip">Healthcare & Clinic</span>
+      <h3 class="text-xl font-bold font-['Outfit'] t-main">Smile Care Dental Clinic</h3>
+      <p class="t-muted text-sm">"We now rank #1 on Google Maps for dental services in our city. Incredible work."</p>
+    </div>
+    <div class="glass card-hover p-8 rounded-3xl space-y-4">
+      <span class="text-xs font-mono px-2.5 py-1 rounded chip">Fitness & Gym</span>
+      <h3 class="text-xl font-bold font-['Outfit'] t-main">Apex Fitness Hub</h3>
+      <p class="t-muted text-sm">"Got over 150 new memberships through Vinit's targeted social media campaigns."</p>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT PAGE -->
+<div id="page-about" class="page-content hidden max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <div class="glass p-8 sm:p-12 rounded-3xl grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+    <div class="md:col-span-4 flex justify-center">
+      <img data-logo alt="Gaytri Solutions" class="w-44 h-44 rounded-full logo-ring">
+    </div>
+    <div class="md:col-span-8 space-y-4 text-center md:text-left">
+      <span class="text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full chip">Founder Bio</span>
+      <h2 class="text-3xl font-black t-main font-['Outfit']">Hi, I'm Vinit</h2>
+      <p class="t-muted text-sm sm:text-base leading-relaxed">I am the founder of <span class="t-main font-semibold">Gaytri Solutions</span>, named in proud honor of my mother, Gaytri. My mission is to empower businesses with world-class digital marketing and lightning-fast websites at the <span class="t-accent font-bold">absolute lowest rates in the market</span>.</p>
+      <p class="t-muted text-sm sm:text-base leading-relaxed">With 6+ years of experience in web development, SEO, and digital marketing, I personally ensure your business dominates search results.</p>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT PAGE WITH WEB3FORMS EMAIL INTEGRATION -->
+<div id="page-contact" class="page-content hidden max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+  <div class="text-center space-y-4">
+    <span class="text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full chip">Get In Touch</span>
+    <h2 class="text-3xl sm:text-5xl font-black font-['Outfit'] t-main">Start Your Project With Vinit</h2>
+    <p class="t-soft text-sm">Fill out the form below to receive immediate details via email.</p>
+  </div>
+  
+  <div class="glass p-8 sm:p-12 rounded-3xl">
+    <!-- Web3Forms Direct Email Form -->
+    <form action="https://api.web3forms.com/submit" method="POST" class="space-y-6">
+      
+      <!-- Web3Forms Access Key -->
+      <input type="hidden" name="access_key" value="ec9abc87-060b-46e4-9b08-c1a93951c2d1">
+      <input type="hidden" name="subject" value="New Enquiry from Gaytri Solutions Website">
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div class="space-y-2">
+          <label class="text-xs font-bold t-muted uppercase">Your Name <span class="t-accent">*</span></label>
+          <input type="text" name="name" required placeholder="Rahul Sharma" class="field">
+        </div>
+        <div class="space-y-2">
+          <label class="text-xs font-bold t-muted uppercase">Business Name <span class="t-accent">*</span></label>
+          <input type="text" name="business" required placeholder="Sharma Store" class="field">
+        </div>
+      </div>
+      
+      <div class="space-y-2">
+        <label class="text-xs font-bold t-muted uppercase">Valid Email Address <span class="t-accent">*</span></label>
+        <input type="email" name="email" required placeholder="rahul@gmail.com" class="field">
+      </div>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div class="space-y-2">
+          <label class="text-xs font-bold t-muted uppercase">Phone / WhatsApp</label>
+          <input type="tel" name="phone" placeholder="+91 98765 43210" class="field">
+        </div>
+        <div class="space-y-2">
+          <label class="text-xs font-bold t-muted uppercase">Service Needed</label>
+          <select name="service" id="contact-service-select" class="field">
+            <option value="">Select a service</option>
+            <option>Search Engine Optimization (SEO)</option>
+            <option>Google Ads (PPC)</option>
+            <option>Meta Ads (Facebook & Instagram)</option>
+            <option>Social Media Marketing</option>
+            <option>Website Design & Development</option>
+            <option>Complete Digital Marketing Package</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="space-y-2">
+        <label class="text-xs font-bold t-muted uppercase">Monthly Budget</label>
+        <select name="budget" class="field">
+          <option value="">Select a range</option>
+          <option>Under ₹5,000</option>
+          <option>₹5,000 – ₹15,000</option>
+          <option>₹15,000 – ₹50,000</option>
+          <option>₹50,000+</option>
+          <option>Not sure yet</option>
+        </select>
+      </div>
+      
+      <div class="space-y-2">
+        <label class="text-xs font-bold t-muted uppercase">Requirements / Message</label>
+        <textarea name="message" rows="4" placeholder="Tell Vinit what you want to grow..." class="field"></textarea>
+      </div>
+      
+      <!-- Spam protection botcheck -->
+      <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+
+      <button type="submit" class="w-full py-4 rounded-xl btn-grad font-extrabold text-base shadow-xl hover:opacity-90 transition-all">
+        Send Secure Message to Vinit <i class="fa-solid fa-paper-plane ml-2"></i>
+      </button>
+    </form>
+  </div>
+</div>
+
+</main>
+
+<footer class="relative z-10 pt-14 pb-8 px-4 sm:px-6 lg:px-8 t-soft" style="background:var(--bg2);border-top:1px solid var(--border)">
+  <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 text-sm">
+    <div class="space-y-4">
+      <div class="flex items-center gap-3"><img data-logo alt="Logo" class="w-12 h-12 rounded-full logo-ring"><span class="text-base font-bold t-main font-['Outfit']">Gaytri Solutions</span></div>
+      <p class="text-xs leading-relaxed">A digital growth agency helping local businesses and brands get more customers online.</p>
+    </div>
+    <div class="space-y-3">
+      <h4 class="font-bold t-main text-sm uppercase tracking-wider">Quick Links</h4>
+      <ul class="space-y-2 text-xs">
+        <li><button onclick="switchPage('home')" class="hover:text-[var(--accent)]">Home</button></li>
+        <li><button onclick="switchPage('services')" class="hover:text-[var(--accent)]">Services</button></li>
+        <li><button onclick="switchPage('pricing')" class="hover:text-[var(--accent)]">Pricing</button></li>
+        <li><button onclick="switchPage('portfolio')" class="hover:text-[var(--accent)]">Portfolio</button></li>
+        <li><button onclick="switchPage('about')" class="hover:text-[var(--accent)]">About</button></li>
+        <li><button onclick="switchPage('contact')" class="hover:text-[var(--accent)]">Contact</button></li>
+      </ul>
+    </div>
+    <div class="space-y-3">
+      <h4 class="font-bold t-main text-sm uppercase tracking-wider">Services</h4>
+      <ul id="footer-services" class="space-y-2 text-xs"></ul>
+    </div>
+    <div class="space-y-3">
+      <h4 class="font-bold t-main text-sm uppercase tracking-wider">Contact</h4>
+      <p class="text-xs">Direct Support by Founder Vinit</p>
+    </div>
+  </div>
+  <div class="max-w-7xl mx-auto mt-10 pt-6 text-center text-xs" style="border-top:1px solid var(--border)">
+    <p>&copy; 2026 Gaytri Solutions. Founder: Vinit. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+const LOGO='data:image/webp;base64,UklGRqA/AABXRUJQVlA4WAoAAAAQAAAA/wAA/wAAQUxQSAQLAAABDs/u/zlyI21bZFQmC0Op1JilMOYMzHWteiWLWV1GRA8vR/XYU3BSA+odG5fvo7hcW+HyngDrchrbRsfRHi1KzKzM/4IURRarMpbX7x+/iH9ExARgLVa1GZ76rd8DdvCqLPiMxoQMQN1Ta7MKQagTaxyAL8w277zxWr4vZ34/a76DWXEAGptU407NcHS2/cLOxweP5OiiO2qnYemo8Wg8QC7bM3e0Nh1nqr5xgG3evf/GO3Js36WUeOYppQQeq/l+2TQHNL7SsWUGALPfe2E/Csk2cVCVJVbVNlFIxv2C7ACYjSlvwMXNG2/9Qkj2XVrwnFpKIMlfvHVj86JD7cdRZQpga+ej2AvbDoOcc0VqhYglbzmgMh09EwAXrv0tj3YLrkhLPFo0Asijpjbgue0/fJQktYPKSlVtk6SI7ecczMaKN+DCS+8IycSVnEhSX4qA+TFiALZufyRsF4OsbLVWWG4nAPXY8Ibq2t8K2S+44g0ki1au9mPCAKT9QbpWZQ1qm0T3twDYWPCG6loRsuPaTCSLVjA/BhTA1v4gXc+1ikTd33JAtfYMer0I2XHtJpLlusLWmhow219I6rmWkWiaHepqbSkQ777DIXFtJ+U7JQLVmprg0u0PhD3XOsgPrLi8jnzjvvhA2C+45g1kTq7x60ZrYPdAWhmFraRdwHStKhed1T22j0k1i3104qf3N0I339qC30r2zG15S08k0N42f/lTZ2U10h3i9z908b2Gv3A4iE97g5o3Gk3S401pA900o0J9P9f/f0gE2p2kH0+2d4e/1/y038/w=='
+document.querySelectorAll('[data-logo]').forEach(i=>i.src=LOGO);
+document.getElementById('favicon').href=LOGO;
+
+function switchPage(id){
+  document.querySelectorAll('.page-content').forEach(e=>e.classList.add('hidden'));
+  const t=document.getElementById('page-'+id); if(t) t.classList.remove('hidden');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  const a=document.getElementById('nav-'+id); if(a) a.classList.add('active');
+  document.querySelectorAll('.m-btn').forEach(b=>b.classList.toggle('active',b.dataset.p===id));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function pickService(sName){
+  switchPage('contact');
+  const sel = document.getElementById('contact-service-select');
+  if(sel){
+    for(let i=0; i<sel.options.length; i++){
+      if(sel.options[i].text.toLowerCase().includes(sName.toLowerCase())){
+        sel.selectedIndex = i; break;
+      }
+    }
+  }
+}
+
+const mobileMenu=document.getElementById('mobile-menu');
+document.getElementById('mobile-menu-btn').addEventListener('click',()=>mobileMenu.classList.toggle('hidden'));
+function closeMobileMenu(){mobileMenu.classList.add('hidden')}
+
+function applyTheme(dark){
+  document.documentElement.classList.toggle('dark',dark);
+  document.getElementById('theme-icon').className=dark?'fa-solid fa-sun':'fa-solid fa-moon';
+}
+function toggleTheme(){applyTheme(!document.documentElement.classList.contains('dark'))}
+
+// Particle Canvas
+const canvas=document.getElementById('bg-canvas'),ctx=canvas.getContext('2d');
+function resize(){canvas.width=innerWidth;canvas.height=innerHeight}
+addEventListener('resize',resize);resize();
+const ps=Array.from({length:40},()=>({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*2+1,vx:(Math.random()-.5)*.5,vy:(Math.random()-.5)*.5}));
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--particle');
+  ps.forEach(p=>{p.x+=p.vx;p.y+=p.vy;
+    if(p.x<0)p.x=canvas.width;if(p.x>canvas.width)p.x=0;if(p.y<0)p.y=canvas.height;if(p.y>canvas.height)p.y=0;
+    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()});
+  requestAnimationFrame(animate);
+}
+animate();
+
+const SERVICES=[
+ {i:'fa-magnifying-glass-chart',t:'Search Engine Optimization (SEO)',d:'On-page, off-page and technical SEO to rank your website higher on Google.'},
+ {i:'fa-location-dot',t:'Local SEO & Google Business Profile',d:'Get listed and ranked on Google Maps so nearby customers find and call you.'},
+ {i:'fa-bullhorn',t:'Google Ads (PPC)',d:'Search, display and shopping campaigns that bring ready-to-buy customers.'},
+ {i:'fa-rectangle-ad',t:'Meta Ads (Facebook & Instagram)',d:'Targeted ad campaigns designed to generate leads, calls and orders.'},
+ {i:'fa-share-nodes',t:'Social Media Marketing',d:'Content planning, posting and community management across all major platforms.'},
+ {i:'fa-laptop-code',t:'Website Design & Development',d:'Fast, mobile-friendly, modern websites built to turn visitors into customers.'}
+];
+
+const FAQS=[
+ ['How quickly can I see results?','Ads can bring enquiries within days of launch. SEO usually takes 2 to 4 months for strong ranking.'],
+ ['Are there any hidden charges?','No. Every package is priced clearly. Ad spend paid to Google or Meta is separate and under your control.'],
+ ['Do I need to have a website already?','Not at all. We can build a fast, professional website for you as part of your package.'],
+ ['Will I get reports on performance?','Yes. You receive simple, regular reports showing leads, traffic, ad performance and progress.']
+];
+
+function svcCard(s){return `<div class="glass card-hover p-7 rounded-3xl space-y-4"><div class="w-12 h-12 rounded-xl chip flex items-center justify-center text-xl"><i class="fa-solid ${s.i}"></i></div><h3 class="font-bold text-lg t-main font-['Outfit']">${s.t}</h3><p class="t-muted text-sm leading-relaxed">${s.d}</p><button onclick="pickService('${s.t.replace(/'/g,"\\'")}')" class="text-xs font-bold t-accent hover:underline">Enquire Now &rarr;</button></div>`}
+document.getElementById('services-grid').innerHTML=SERVICES.map(svcCard).join('');
+document.getElementById('home-services').innerHTML=SERVICES.slice(0,6).map(svcCard).join('');
+document.getElementById('footer-services').innerHTML=SERVICES.map(n=>`<li><button onclick="pickService('${n.t}')" class="hover:text-[var(--accent)] text-left">${n.t}</button></li>`).join('');
+
+document.getElementById('faq-list').innerHTML=FAQS.map((f,i)=>`<div class="glass rounded-2xl overflow-hidden"><button class="w-full flex items-center justify-between gap-4 text-left px-6 py-4 font-bold text-sm t-main" onclick="toggleFaq(${i})"><span>${f[0]}</span><i id="faq-i-${i}" class="fa-solid fa-plus t-accent transition-transform"></i></button><div id="faq-a-${i}" class="hidden px-6 pb-5 text-sm t-muted leading-relaxed">${f[1]}</div></div>`).join('');
+function toggleFaq(i){const a=document.getElementById('faq-a-'+i),ic=document.getElementById('faq-i-'+i);const open=a.classList.toggle('hidden')===false;ic.className=open?'fa-solid fa-minus t-accent':'fa-solid fa-plus t-accent'}
+</script>
+</body>
+</html>
+```
